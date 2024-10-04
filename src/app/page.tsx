@@ -4,9 +4,11 @@ import { DataInterface } from "./bots/page";
 import { detectBot } from "./utils/botUtils";
 import dynamic from "next/dynamic";
 
-const HomePage = dynamic(() => import("./bots/page"), {
+
+const HomePage = dynamic( () => import("./bots/page"), {
   ssr: true,
 });
+
 
 export default async function Home() {
   const headersList = headers();
@@ -14,11 +16,13 @@ export default async function Home() {
   const isBotDetected = detectBot(userAgent);
 
   let initialMetadata: DataInterface | null = null;
-  initialMetadata = await fetchMetadata({
-    userAgent,
-    page: "/",
-    isBot: isBotDetected,
-  });
+  // if (isBotDetected) {
+    initialMetadata = await fetchMetadata({
+      userAgent,
+      page: "/",
+      isBot: isBotDetected,
+    });
+  // }
 
   return (
     <HomePage
